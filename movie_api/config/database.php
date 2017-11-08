@@ -19,7 +19,7 @@
         }
 
         //movies
-        public function createMovie($movie){
+        public function createMovie($movie, $nickname){
             $query = "
                 INSERT INTO movies
                 SET
@@ -31,8 +31,9 @@
             $stmt->bindParam(":kp_ref", $movie->kp_ref);
             if ($stmt->execute()) {
                 $movie->id=$this->conn->lastInsertId();
+                $user_id = $this->getUserId($nickname);
                 $this->setState($movie->id, 1);
-                $this->registerOffer($movie->id, 1);
+                $this->registerOffer($movie->id, $user_id);
                 return true;
             } else {
                 return false;
@@ -41,9 +42,9 @@
 
         private function registerOffer($movieId, $userId){
             $query = "
-            INSERT INTO offers
-            SET
-                movie_id=:movie, user_id=:user";
+                INSERT INTO offers
+                SET
+                    movie_id=:movie, user_id=:user";
 
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(":movie", $movieId);
@@ -108,6 +109,19 @@
             $stmt->execute();
 
             return $stmt;
+        }
+
+        public function getUserId($nickname){
+            $query = "
+                SELECT id
+                FROM users
+                WHERE nickname=?";
+        
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(1, $nickname);
+            $stmt->execute();
+
+            return $stmt->fetch(PDO::FETCH_ASSOC)['id'];
         }
     }
 ?>

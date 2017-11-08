@@ -19,7 +19,7 @@
             $movie->kp_ref = $data->kp_ref;
         
             // create the movie
-            if($movie->create()){
+            if($movie->create($data->nickname)){
                 echo '{';
                     echo '"ok": "true",';
                     // make it json format

@@ -28,10 +28,18 @@ export default class MovieInput extends Component{
         });
     }
 
+    componentDidMount(){
+        window.ee.on('Movie.add', function(item) {
+            ReactDOM.findDOMNode(this.refs.movieRefInput).value = '';
+            ReactDOM.findDOMNode(this.refs.movieNameInput).value = '';
+        }.bind(this));   
+    }
+
     onBtnClickHandler() {
         var form_data = {
             name: ReactDOM.findDOMNode(this.refs.movieNameInput).value,
-            kp_ref: ReactDOM.findDOMNode(this.refs.movieRefInput).value
+            kp_ref: ReactDOM.findDOMNode(this.refs.movieRefInput).value,
+            nickname: ReactDOM.findDOMNode(this.refs.user_switcher).value
         };
         $.ajax({
             url: this.api_url + "movie/create",
@@ -64,19 +72,19 @@ export default class MovieInput extends Component{
             <div className='block'>
             <div>
                 <input
-                className='movie-input'
-                defaultValue=''
-                placeholder='введите наименование фильма'
-                ref='movieNameInput'
+                    className='movie-input'
+                    defaultValue=''
+                    placeholder='введите наименование фильма'
+                    ref='movieNameInput'
                 />
                 <input
-                className='movie-input'
-                defaultValue=''
-                placeholder='введите ссылку на кинопоиск'
-                ref='movieRefInput'
+                    className='movie-input'
+                    defaultValue=''
+                    placeholder='введите ссылку на кинопоиск'
+                    ref='movieRefInput'
                 />
             </div>
-            <select name="sometext">
+            <select ref='user_switcher'>
                 {users}
             </select>
             <button onClick={this.onBtnClickHandler.bind(this)} ref='add_button'

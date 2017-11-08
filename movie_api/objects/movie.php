@@ -16,10 +16,10 @@
             return $this->conn->readAllMovies();
         }
 
-        function create() {            
+        function create($nickname) {            
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->kp_ref=htmlspecialchars(strip_tags($this->kp_ref));
-            return $this->conn->createMovie($this);
+            return $this->conn->createMovie($this, $nickname);
         }
 
         function readOne(){
