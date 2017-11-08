@@ -29,7 +29,6 @@
 
             $stmt->bindParam(":name", $movie->name);
             $stmt->bindParam(":kp_ref", $movie->kp_ref);
-
             if ($stmt->execute()) {
                 $movie->id=$this->conn->lastInsertId();
                 $this->setState($movie->id, 1);

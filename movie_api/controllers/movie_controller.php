@@ -14,7 +14,6 @@
             
             // get posted data
             $data = json_decode(file_get_contents("php://input"));
-        
             // set movie property values
             $movie->name = $data->name;
             $movie->kp_ref = $data->kp_ref;
