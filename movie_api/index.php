@@ -12,6 +12,11 @@
             $mc = new MovieController();
             $mc->route($keys);
         break;
+        case "user":
+            include_once 'controllers/user_controller.php';
+            $uc = new UserController();
+            $uc->route($keys);
+        break;
         default:
             echo 'there is no such controller';
         break;

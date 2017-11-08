@@ -9,13 +9,16 @@
             $this->dbInfo = new DatabaseInfo();
 
             try{
-                $this->conn = new PDO("mysql:host=" . $this->dbInfo->host . ";dbname=" . $this->dbInfo->db_name, $this->dbInfo->username, $this->dbInfo->password);
+                $this->conn = new PDO("mysql:host=" . $this->dbInfo->host . ";dbname=" . $this->dbInfo->db_name, 
+                    $this->dbInfo->username, 
+                    $this->dbInfo->password);
                 $this->conn->exec("set names utf8");
             } catch(PDOException $exception) {
                 echo "Connection error: " . $exception->getMessage();
             }
         }
 
+        //movies
         public function createMovie($movie){
             $query = "
                 INSERT INTO movies
@@ -94,6 +97,18 @@
             $stmt->execute();
             
             return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+
+        //users
+        public function readAllUsers(){
+            $query = "
+                SELECT *
+                FROM users";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+
+            return $stmt;
         }
     }
 ?>

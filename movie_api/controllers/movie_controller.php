@@ -6,7 +6,7 @@
         public function __construct(){
             include_once 'config/database.php';
             include_once 'objects/movie.php';
-            $this->db = new Database();;
+            $this->db = new Database();
         }
 
         private function createMovie(){            
@@ -93,7 +93,7 @@
                         $this->getOne();
                     break;
                     default:
-                        echo 'no such controller';
+                        echo 'no such method';
                     break;
                 }
             } else {
