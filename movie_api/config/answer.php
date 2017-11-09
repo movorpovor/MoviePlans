@@ -7,7 +7,7 @@
 
         public function setResponse($response){
             $this->status = 'ok';
-            $this->response = json_encode($response);
+            $this->response = $response;
         }
 
         public $status;

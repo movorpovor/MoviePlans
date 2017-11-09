@@ -24,6 +24,14 @@
             }
         }
 
+        private function get($answer){
+            if (array_key_exists('movie_id', $_GET)){
+                $this->getOne($answer);
+            } else {
+                $this->getAll($answer);
+            }
+        }
+
         private function getAll($answer){
             $movie = new Movie($this->db);
             
@@ -55,7 +63,7 @@
 
         private function getOne($answer){
             $movie = new Movie($this->db);
-            $movie->id = $_GET['id'];
+            $movie->id = $_GET['movie_id'];
             $movie->readOne();
 
             $movie_arr = array(
@@ -73,11 +81,8 @@
                     case 'create':
                         $this->createMovie($answer);
                     break;
-                    case 'get_all':
-                        $this->getAll($answer);
-                    break;
-                    case 'get_one':
-                        $this->getOne($answer);
+                    case 'get':
+                        $this->get($answer);
                     break;
                     default:
                         $answer->setError('no such method');
