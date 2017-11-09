@@ -6,14 +6,13 @@
             $this->db = new Database();
         }
 
-        private function getAll(){
+        private function getAll($answer){
             $user = new User($this->db);
             
             $stmt = $user->readAll();
             $num = $stmt->rowCount();
             if ($num>0) {
                 $users_arr=array();
-                $users_arr["records"]=array();
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                     extract($row);
@@ -23,31 +22,29 @@
                         "nickname" => $nickname
                     );
             
-                    array_push($users_arr["records"], $user_item);
+                    array_push($users_arr, $user_item);
                 }
             
-                echo json_encode($users_arr);
+                $answer->setResponse($users_arr);
             }
             else {
-                echo json_encode(
-                    array("message" => "No users found.")
-                );
+                $answer->setError("No users found.");
             }
         }
 
-        function route($keys){
+        function route($keys, $answer){
             if (count($keys) == 1) {
                 switch($keys[0]) {
 
                     case 'get_all':
-                        $this->getAll();
+                        $this->getAll($answer);
                     break;
                     default:
-                        echo 'no such method';
+                        $answer->setError('no such method');
                     break;
                 }
             } else {
-                echo 'wrong controller';
+                $answer->setError('wrong controller');
             }
         }
     }

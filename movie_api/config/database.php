@@ -74,14 +74,36 @@
             }
         }
 
-        public function readAllMovies(){
+        public function readAllMovies($userId){
             $query = "
-                SELECT *
-                FROM movies";
+                SELECT
+                    offerInfo.name,
+                    offerInfo.kp_ref,
+                    offerInfo.user_id,
+                    movie_state.state_id
+                FROM
+                (
+                    SELECT
+                        movies.name,
+                        movies.kp_ref,
+                        movies.id AS movie_id,
+                        offers.user_id
+                    FROM
+                        movies
+                    LEFT JOIN offers ON movies.id = offers.movie_id
+                ) AS offerInfo
+                LEFT JOIN movie_state ON offerInfo.movie_id = movie_state.movie_id ";
             
-            $stmt = $this->conn->prepare($query);
+            if ($userId != null)
+            {
+                $query = $query . "WHERE offerInfo.user_id = ?";
+                $stmt = $this->conn->prepare($query);
+                $stmt->bindParam(1, $userId);
+            }
+            else
+                $stmt = $this->conn->prepare($query);
+                
             $stmt->execute();
-
             return $stmt;
         }
 

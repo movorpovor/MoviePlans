@@ -9,40 +9,30 @@
             $this->db = new Database();
         }
 
-        private function createMovie(){            
+        private function createMovie($answer){            
             $movie = new Movie($this->db);
             
-            // get posted data
             $data = json_decode(file_get_contents("php://input"));
-            // set movie property values
             $movie->name = $data->name;
             $movie->kp_ref = $data->kp_ref;
         
-            // create the movie
             if($movie->create($data->nickname)){
-                echo '{';
-                    echo '"ok": "true",';
-                    // make it json format
-                    echo '"movie": ';
-                    echo json_encode($movie);
-                echo '}';
+                $answer->setResponse($movie);
             }
-            // if unable to create the movie, tell the user
             else{
-                echo '{';
-                    echo '"ok": "false"';
-                echo '}';
+                $answer->setError('Unable create the movie');
             }
         }
 
-        private function getAll(){
+        private function getAll($answer){
             $movie = new Movie($this->db);
             
-            $stmt = $movie->readAll();
+            $userId = $_GET['user_id'];
+
+            $stmt = $movie->readAll($userId);
             $num = $stmt->rowCount();
             if ($num>0) {
                 $movies_arr=array();
-                $movies_arr["records"]=array();
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                     extract($row);
@@ -53,19 +43,17 @@
                         "kp_ref" => $kp_ref
                     );
             
-                    array_push($movies_arr["records"], $movie_item);
+                    array_push($movies_arr, $movie_item);
                 }
             
-                echo json_encode($movies_arr);
+                $answer->setResponse($movies_arr);
             }
             else {
-                echo json_encode(
-                    array("message" => "No movies found.")
-                );
+                $answer->setError('No movies found.');
             }
         }
 
-        private function getOne(){
+        private function getOne($answer){
             $movie = new Movie($this->db);
             $movie->id = $_GET['id'];
             $movie->readOne();
@@ -76,27 +64,27 @@
                 "kp_ref" => $movie->kp_ref,
             );
             
-            print_r(json_encode($movie_arr));
+            $answer->setResponse($movie_arr);
         }
 
-        function route($keys){
+        function route($keys, $answer){
             if (count($keys) == 1) {
                 switch($keys[0]) {
                     case 'create':
-                        $this->createMovie();
+                        $this->createMovie($answer);
                     break;
                     case 'get_all':
-                        $this->getAll();
+                        $this->getAll($answer);
                     break;
                     case 'get_one':
-                        $this->getOne();
+                        $this->getOne($answer);
                     break;
                     default:
-                        echo 'no such method';
+                        $answer->setError('no such method');
                     break;
                 }
             } else {
-                echo 'wrong controller';
+                $answer->setError('wrong controller');
             }
         }
     }

@@ -12,8 +12,8 @@
         }
 
         // read movies
-        function readAll(){ 
-            return $this->conn->readAllMovies();
+        function readAll($userId){ 
+            return $this->conn->readAllMovies($userId);
         }
 
         function create($nickname) {            

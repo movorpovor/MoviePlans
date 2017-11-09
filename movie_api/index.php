@@ -6,19 +6,24 @@
     header('Content-Type: application/json');
 
     $keys = explode("/", key($_GET));
+    include_once 'config/answer.php';
+    $answer = new Answer();
+
     switch(array_shift($keys)) {
         case "movie":
             include_once 'controllers/movie_controller.php';
             $mc = new MovieController();
-            $mc->route($keys);
+            $mc->route($keys, $answer);
         break;
         case "user":
             include_once 'controllers/user_controller.php';
             $uc = new UserController();
-            $uc->route($keys);
+            $uc->route($keys, $answer);
         break;
         default:
-            echo 'there is no such controller';
+            $answer->setError('there is no such controller');
         break;
     }
+
+    print_r(json_encode($answer));
 ?>
