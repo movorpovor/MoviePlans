@@ -7,30 +7,20 @@ export default class MovieInput extends Component{
         super(props);
         this.api_url = "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/";
         this.state = {
-            users: []
+            users: props.users
         };
-    }
-
-    componentWillMount() {
-        $.ajax({
-            url: this.api_url + "user/get_all",
-            type : "GET",
-            success : function(response) {
-                this.setState({
-                    users: response['response']
-                });
-            }.bind(this),
-            error: function(xhr, resp, text){
-                // show error to console
-                console.log(xhr, resp, text);
-            }
-        });
     }
 
     componentDidMount(){
         window.ee.on('Movie.add', function(item) {
             ReactDOM.findDOMNode(this.refs.movieRefInput).value = '';
         }.bind(this));   
+
+        window.ee.on('Users.Recieved', function(users) {
+            this.setState({
+                users: users
+            });
+        }.bind(this));
     }
 
     onBtnClickHandler() {

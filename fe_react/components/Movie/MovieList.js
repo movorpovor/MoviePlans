@@ -8,29 +8,18 @@ export default class MovieList extends Component{
         super(props);
 
         this.state = {
-            movies: []
+            movies: props.user_and_movies.movies,
+            user: props.user_and_movies.user
         };
     }
 
     componentDidMount() {
         window.ee.on('Movie.add', function(item) {
-            var nextMovies = this.state.movies.concat(item);
-            this.setState({movies: nextMovies});
-        }.bind(this));
-
-        $.ajax({
-            url: "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/movie/get?user_id=" + this.props.user_id,
-            type : "GET",
-            success : function(response) {
-                this.setState({
-                    movies: response['response']
-                });
-            }.bind(this),
-            error: function(xhr, resp, text){
-                // show error to console
-                console.log(xhr, resp, text);
+            if (item.user_id == this.state.user.id){
+                var nextMovies = this.state.movies.concat(item);
+                this.setState({movies: nextMovies});
             }
-        });
+        }.bind(this));
     }
 
     render() {
