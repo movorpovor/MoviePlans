@@ -88,7 +88,7 @@
             $movie_arr = array(
                 "id" =>  $movie->id,
                 "title" => $movie->title,
-                "km_ref" => $movie->km_ref,
+                "km_ref" => $movie->km_ref
             );
 
             $answer->setResponse($movie_arr);

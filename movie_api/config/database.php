@@ -35,9 +35,9 @@
             
             if ($stmt->execute()) {
                 $movie->id=$this->conn->lastInsertId();
-                $user_id = $this->getUserId($nickname);
+                $movie->user_id = $this->getUserId($nickname);
                 $this->setState($movie->id, 1);
-                $this->registerOffer($movie->id, $user_id);
+                $this->registerOffer($movie->id, $movie->user_id);
                 return true;
             } else {
                 return false;
@@ -140,10 +140,17 @@
 
         public function readOneMovie($id){
             $query = "
-                SELECT *
-                FROM movies
+                SELECT 
+                    movies.id, 
+                    movies.title,
+                    movies.original_title, 
+                    movies.description,
+                    movies.cover,
+                    movies.km_ref,
+                    users.id as user_id
+                FROM movies LEFT JOIN offers ON movies.id = offers.movie_id
                 WHERE
-                    id = ?";
+                    movies.id = ?";
     
             $stmt = $this->conn->prepare( $query );
             $stmt->bindParam(1, $id);

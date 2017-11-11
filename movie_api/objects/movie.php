@@ -9,6 +9,7 @@
         public $km_ref;
         public $description;
         public $cover;
+        public $user_id;
 
         public function __construct($db) {
             $this->conn = $db;
