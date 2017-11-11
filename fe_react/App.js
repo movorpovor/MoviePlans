@@ -12,8 +12,11 @@ class App extends Component{
   
   render() {
     return (
-      <div>
-        <MovieList/>
+      <div className='main-div'>
+        <div className='list-of-lists'>
+          <MovieList user_id={1} />
+          <MovieList user_id={2} />
+        </div>
         <MovieInput/>
       </div>
     );

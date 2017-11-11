@@ -3,13 +3,27 @@ body {
   font-family: sans-serif;
 }
 
+html, body, .main-div, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
 .block {
   background: #FFF;
   border: 1px solid rgba(0, 89, 181, 0.82);
   width: 25%;
   margin: 0 0 5px;
   box-shadow: 2px 2px 5px -1px rgb(0, 81, 202);
-  padding: 3px 5px;
+  padding: 5px 5px 5px 5px;
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+}
+
+.list-of-lists{
+  display: flex;
+  flex-direction: row;
+  height: 85%;
 }
 
 .movie-input {
@@ -18,4 +32,40 @@ body {
 
 .add-button {
   width: 33%;
+}
+
+.cover {
+  width: 76px;
+  height: 110px;
+}
+
+.movie {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgba(78, 86, 95, 0.82);
+  margin: 3px 0px 0px 0px;
+  border-radius: 10px;
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
+}
+
+.original-title {
+  color: rgb(141, 141, 141);
+  font-size: 13px;
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.movie-info {
+  padding: 0px 0px 0px 5px
+}
+
+.about-movie {
+  font-size: 13px;
+  padding: 0px 5px 0px 0px
 }

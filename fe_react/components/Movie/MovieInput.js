@@ -11,14 +11,13 @@ export default class MovieInput extends Component{
         };
     }
 
-
     componentWillMount() {
         $.ajax({
             url: this.api_url + "user/get_all",
             type : "GET",
             success : function(response) {
                 this.setState({
-                    users: response['records']
+                    users: response['response']
                 });
             }.bind(this),
             error: function(xhr, resp, text){
@@ -31,14 +30,12 @@ export default class MovieInput extends Component{
     componentDidMount(){
         window.ee.on('Movie.add', function(item) {
             ReactDOM.findDOMNode(this.refs.movieRefInput).value = '';
-            ReactDOM.findDOMNode(this.refs.movieNameInput).value = '';
         }.bind(this));   
     }
 
     onBtnClickHandler() {
         var form_data = {
-            name: ReactDOM.findDOMNode(this.refs.movieNameInput).value,
-            kp_ref: ReactDOM.findDOMNode(this.refs.movieRefInput).value,
+            km_ref: ReactDOM.findDOMNode(this.refs.movieRefInput).value,
             nickname: ReactDOM.findDOMNode(this.refs.user_switcher).value
         };
         $.ajax({
@@ -47,10 +44,11 @@ export default class MovieInput extends Component{
             contentType : 'application/json',
             data : JSON.stringify(form_data),
             success : function(response) {
-                if (response.ok)
-                {
-                    window.ee.emit('Movie.add', response.movie);
+                if (response.status == 'ok'){
+                    window.ee.emit('Movie.add', response.response);
                 }
+                else
+                    alert('film already exist');
             },
             error: function(xhr, resp, text){
                 // show error to console
@@ -70,27 +68,21 @@ export default class MovieInput extends Component{
 
         return (
             <div className='block'>
-            <div>
-                <input
-                    className='movie-input'
-                    defaultValue=''
-                    placeholder='введите наименование фильма'
-                    ref='movieNameInput'
-                />
-                <input
-                    className='movie-input'
-                    defaultValue=''
-                    placeholder='введите ссылку на кинопоиск'
-                    ref='movieRefInput'
-                />
-            </div>
-            <select ref='user_switcher'>
-                {users}
-            </select>
-            <button onClick={this.onBtnClickHandler.bind(this)} ref='add_button'
-                className='add-button'>
-                Добавить фильм
-            </button>
+                <div>
+                    <input
+                        className='movie-input'
+                        defaultValue=''
+                        placeholder='введите ссылку на киноманию'
+                        ref='movieRefInput'
+                    />
+                </div>
+                <select ref='user_switcher'>
+                    {users}
+                </select>
+                <button onClick={this.onBtnClickHandler.bind(this)} ref='add_button'
+                    className='add-button'>
+                    Добавить фильм
+                </button>
             </div>
         );
     }

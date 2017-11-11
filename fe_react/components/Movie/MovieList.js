@@ -19,11 +19,11 @@ export default class MovieList extends Component{
         }.bind(this));
 
         $.ajax({
-            url: "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/movie/get_all",
+            url: "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/movie/get?user_id=" + this.props.user_id,
             type : "GET",
             success : function(response) {
                 this.setState({
-                    movies: response['records']
+                    movies: response['response']
                 });
             }.bind(this),
             error: function(xhr, resp, text){
