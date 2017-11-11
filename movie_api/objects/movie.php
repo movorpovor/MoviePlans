@@ -4,8 +4,11 @@
         private $table_name = "movies";
 
         public $id;
-        public $name;
-        public $kp_ref;
+        public $title;
+        public $original_title;
+        public $km_ref;
+        public $description;
+        public $cover;
 
         public function __construct($db) {
             $this->conn = $db;
@@ -16,16 +19,14 @@
             return $this->conn->readAllMovies($userId);
         }
 
-        function create($nickname) {            
-            $this->name=htmlspecialchars(strip_tags($this->name));
-            $this->kp_ref=htmlspecialchars(strip_tags($this->kp_ref));
+        function create($nickname) {                        
             return $this->conn->createMovie($this, $nickname);
         }
 
         function readOne(){
             $row = $this->conn->readOneMovie($this->id);            
-            $this->name = $row['name'];
-            $this->kp_ref = $row['kp_ref'];
+            $this->title = $row['title'];
+            $this->km_ref = $row['km_ref'];
         }
     }
 ?>

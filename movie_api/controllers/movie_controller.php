@@ -1,4 +1,4 @@
-<?php
+<?php   
     class MovieController {
 
         private $db;
@@ -10,18 +10,33 @@
         }
 
         private function createMovie($answer){            
-            $movie = new Movie($this->db);
-            
             $data = json_decode(file_get_contents("php://input"));
-            $movie->name = $data->name;
-            $movie->kp_ref = $data->kp_ref;
-        
-            if($movie->create($data->nickname)){
-                $answer->setResponse($movie);
+
+            if (!$this->db->movieExists($data->km_ref, $answer))
+            {
+                $movie = $this->grabInfoFromKM($data->km_ref, $movie);
+            
+                if($movie->create($data->nickname)){
+                    $answer->setResponse($movie);
+                }
+                else{
+                    $answer->setError('Unable create the movie');
+                }
             }
-            else{
-                $answer->setError('Unable create the movie');
-            }
+        }
+
+        private function grabInfoFromKM($ref){
+            $movie = new Movie($this->db);
+            $movie->km_ref = $ref;
+
+            include_once('config/simple_html_dom.php');
+            $page = file_get_html($movie->km_ref);
+            $movie->cover = $page->find('.image-cover', 0)->src;
+            $movie->title = $page->find('.pagetitle', 0)->plaintext;
+            $movie->original_title = $page->find('.name__page', 0)->plaintext;
+            $movie->description = $page->find('.list-post-item-content', 0)->plaintext;
+            
+            return $movie;
         }
 
         private function get($answer){
@@ -46,9 +61,13 @@
                     extract($row);
             
                     $movie_item=array(
-                        "id" => $id,
-                        "name" => $name,
-                        "kp_ref" => $kp_ref
+                        "id" => $movie_id,
+                        "title" => $title,
+                        "original_title" => $original_title,
+                        "km_ref" => $km_ref,
+                        "description" => $description,
+                        "cover" => $cover,
+                        "user_id" => $user_id
                     );
             
                     array_push($movies_arr, $movie_item);
@@ -68,10 +87,10 @@
 
             $movie_arr = array(
                 "id" =>  $movie->id,
-                "name" => $movie->name,
-                "kp_ref" => $movie->kp_ref,
+                "title" => $movie->title,
+                "km_ref" => $movie->km_ref,
             );
-            
+
             $answer->setResponse($movie_arr);
         }
 

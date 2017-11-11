@@ -23,12 +23,16 @@
             $query = "
                 INSERT INTO movies
                 SET
-                    name=:name, kp_ref=:kp_ref";
+                    title=:title, original_title=:original_title, km_ref=:km_ref, description=:description, cover=:cover";
             
             $stmt = $this->conn->prepare($query);
 
-            $stmt->bindParam(":name", $movie->name);
-            $stmt->bindParam(":kp_ref", $movie->kp_ref);
+            $stmt->bindParam(":title", $movie->title);
+            $stmt->bindParam(":original_title", $movie->original_title);
+            $stmt->bindParam(":km_ref", $movie->km_ref);
+            $stmt->bindParam(":description", $movie->description);
+            $stmt->bindParam(":cover", $movie->cover);
+            
             if ($stmt->execute()) {
                 $movie->id=$this->conn->lastInsertId();
                 $user_id = $this->getUserId($nickname);
@@ -37,6 +41,26 @@
                 return true;
             } else {
                 return false;
+            }
+        }
+
+        public function movieExists($km_ref, $answer){
+            $query = "
+                SELECT id
+                FROM movies
+                WHERE km_ref=:km_ref";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(":km_ref", $km_ref);
+            $stmt->execute();
+
+            if ($stmt->rowCount() == 0)
+                return false;
+            else
+            {
+                $answer->setError('Movie already exists');
+                $answer->message = $stmt->fetch(PDO::FETCH_ASSOC);
+                return true;
             }
         }
 
@@ -77,15 +101,22 @@
         public function readAllMovies($userId){
             $query = "
                 SELECT
-                    offerInfo.name,
-                    offerInfo.kp_ref,
+                    offerInfo.title,
+                    offerInfo.original_title,
+                    offerInfo.km_ref,
                     offerInfo.user_id,
+                    offerInfo.description,
+                    offerInfo.cover,
+                    offerInfo.movie_id,
                     movie_state.state_id
                 FROM
                 (
                     SELECT
-                        movies.name,
-                        movies.kp_ref,
+                        movies.title,
+                        movies.original_title,
+                        movies.km_ref,
+                        movies.description,
+                        movies.cover,
                         movies.id AS movie_id,
                         offers.user_id
                     FROM

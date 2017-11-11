@@ -3,7 +3,7 @@
     header("Access-Control-Allow-Headers: access");
     header("Access-Control-Allow-Methods: GET");
     header("Access-Control-Allow-Credentials: true");
-    header('Content-Type: application/json');
+    header('Content-Type: application/json; charset= utf-8');
 
     $keys = explode("/", key($_GET));
     include_once 'config/answer.php';
