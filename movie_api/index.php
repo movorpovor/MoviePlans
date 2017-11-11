@@ -20,6 +20,11 @@
             $uc = new UserController();
             $uc->route($keys, $answer);
         break;
+        case "base":
+            include_once 'controllers/base_controller.php';
+            $bc = new BaseController();
+            $bc->route($keys, $answer);
+        break;
         default:
             $answer->setError('there is no such controller');
         break;
