@@ -34,7 +34,7 @@
             $movie->cover = $page->find('.image-cover', 0)->src;
             $movie->title = $page->find('.pagetitle', 0)->plaintext;
             $movie->original_title = $page->find('.name__page', 0)->plaintext;
-            $movie->description = $page->find('.list-post-item-content', 0)->plaintext;
+            $movie->description = html_entity_decode($page->find('.list-post-item-content', 0)->plaintext);
             
             return $movie;
         }
