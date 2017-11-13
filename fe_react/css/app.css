@@ -48,8 +48,6 @@ html, body, .main-div, #root {
   width: 100%;
   height: 110px;
   overflow: hidden;
-  cursor: pointer;
-  user-select: none;
 }
 
 .original-title {
@@ -69,5 +67,5 @@ html, body, .main-div, #root {
 
 .about-movie {
   font-size: 13px;
-  padding: 0px 5px 0px 0px;
+  padding: 0px 5px 0px 0px
 }
