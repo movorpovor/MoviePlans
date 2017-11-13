@@ -8,6 +8,10 @@ html, body, .main-div, #root {
   overflow: hidden;
 }
 
+.dragging {
+  opacity: 0;
+}
+
 .block {
   background: #FFF;
   border: 1px solid rgba(0, 89, 181, 0.82);

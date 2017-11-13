@@ -1,17 +1,39 @@
 import React, {Component} from 'react'
 import Movie from './Movie';
+import { ItemTypes } from '../../core/ItemTypes';
+import PropTypes from 'prop-types';
+import { DropTarget } from 'react-dnd'
 import $ from 'jquery';
 
-export default class MovieList extends Component{
+const movieListTarget = {
+	drop(props, monitor) {
+		props.onDrop(monitor.getItem())
+	},
+}
 
+function collect (connect, monitor){
+	return {
+        connectDropTarget: connect.dropTarget()
+    }
+}
+
+class MovieList extends Component{
     constructor(props){
         super(props);
-
         this.state = {
-            movies: props.user_and_movies.movies,
-            user: props.user_and_movies.user
+            movies: props.movies,
+            user: props.user
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.movies !== this.state.movies || nextProps.user !== this.state.user){
+            this.setState({ 
+                movies: nextProps.movies,
+                user: nextProps.user
+            });
+        }
+      }
 
     componentDidMount() {
         window.ee.on('Movie.add', function(item) {
@@ -26,15 +48,26 @@ export default class MovieList extends Component{
         var moviesTemplate = this.state.movies.map(function(item, index) {
             return (
               <div key={index}>
-                <Movie movie={item} />
+                <Movie 
+                    movie={item} 
+                />
               </div>
             )
-        })
+        });
 
-        return (
+        return this.props.connectDropTarget(
             <div className='block'>
                 {moviesTemplate}
             </div>
         );
     }
 }
+
+MovieList.propTypes = {
+    user: PropTypes.object.isRequired,
+    movies: PropTypes.arrayOf(PropTypes.object).isRequired,
+    connectDropTarget: PropTypes.func.isRequired,
+    onDrop: PropTypes.func.isRequired,
+}
+
+export default DropTarget(ItemTypes.MOVIE, movieListTarget, collect)(MovieList)
