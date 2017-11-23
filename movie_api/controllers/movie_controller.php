@@ -25,6 +25,12 @@
             }
         }
 
+        private function updateMovieState($answer){
+            $movie = json_decode(file_get_contents("php://input"));
+            if ($this->db->updateMovieState($movie))
+                $answer->setResponse("movie was updated");
+        }
+
         private function grabInfoFromKM($ref){
             $movie = new Movie($this->db);
             $movie->km_ref = $ref;
@@ -103,6 +109,9 @@
                     break;
                     case 'get':
                         $this->get($answer);
+                    break;
+                    case 'update_state':
+                        $this->updateMovieState($answer);
                     break;
                     default:
                         $answer->setError('no such method');
