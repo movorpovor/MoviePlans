@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import EventEmitter from 'EventEmitter';
-import MovieList from './components/Movie/MovieList';
+import MovieList from './components/MovieList';
 import MovieInput from './components/Movie/MovieInput';
+import CustomDragLayer from './components/CustomDragLayer'
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import $ from 'jquery';
@@ -11,8 +12,7 @@ class App extends Component{
   constructor(props){
     super(props);
     this.state = {
-      users: [],
-      movies: []
+      users: []
     };
     window.ee = new EventEmitter();
   }
@@ -23,8 +23,7 @@ class App extends Component{
       type : "GET",
       success : function(response) {
         this.setState({
-          users: response.response.users,
-          movies: response.response.movies
+          users: this.parseInitState(response)
         });
         window.ee.emit('Users.Recieved', response.response.users);
       }.bind(this),
@@ -35,46 +34,36 @@ class App extends Component{
     });
   }
 
-  handleDrop(user, item){
-    var allMovies = this.state.movies;
-    var i = 0;
-    while (i < allMovies.length){
-      if (allMovies[i].id == item.movieId){
-        allMovies[i].user_id = user.id;
-        break;
+  parseInitState(response){
+    var moviesArr = response.response.movies;
+    var usersAndTheirMovies = [];
+    response.response.users.forEach(function(user){
+      var usersMovies = [];
+      var i = 0;
+      while(i < moviesArr.length){
+        if (moviesArr[i].user_id == user.id)
+          usersMovies.push(moviesArr.splice(i, 1)[0]);
+        else
+          i++;
       }
-      i++;
-    }
+      var info = {
+        'user': user,
+        'movies': usersMovies
+      };
 
-    this.setState({
-      movies: allMovies
-    })
-  }
-
-  grabMoviesOfUser(userId) {
-    var allMovies = this.state.movies;
-    var userMovies = [];
-    allMovies.forEach(function(item, i, allMovies) {
-      if (item.user_id == userId)
-        userMovies.push(item);
+      usersAndTheirMovies.push(info);
     });
 
-    console.log(userMovies);
-    return userMovies;
+    return usersAndTheirMovies;
   }
   
   render() {
-    var template = this.state.users.map((user) => (
-        <MovieList 
-          user={user}
-          movies={this.grabMoviesOfUser(user.id)} 
-          key={"user_" + user.id} 
-          onDrop={item => this.handleDrop(user, item)}
-        />
-      )
-    )
+    var template = this.state.users.map(function(item){
+      return <MovieList user_and_movies={item} key={"user_" + item.user.id} />;
+    });
     return (
       <div className='main-div'>
+        <CustomDragLayer />
         <div className='list-of-lists'>
           {template}
         </div>
@@ -84,4 +73,4 @@ class App extends Component{
   }
 }
 
-export default DragDropContext(HTML5Backend)(App);
+export default DragDropContext(HTML5Backend)(App)
