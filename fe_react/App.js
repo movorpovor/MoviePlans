@@ -37,11 +37,15 @@ class App extends Component{
   parseInitState(response){
     var moviesArr = response.response.movies;
     var usersAndTheirMovies = [];
+    var watchedMovies = [];
+
     response.response.users.forEach(function(user){
       var usersMovies = [];
       var i = 0;
       while(i < moviesArr.length){
-        if (moviesArr[i].user_id == user.id)
+        if (moviesArr[i].state_id == 2) //пока будет магическое число, потом придумаю как покрасивше сделать
+          watchedMovies.push(moviesArr.splice(i, 1)[0]);
+        else if (moviesArr[i].user_id == user.id)
           usersMovies.push(moviesArr.splice(i, 1)[0]);
         else
           i++;
@@ -53,6 +57,16 @@ class App extends Component{
 
       usersAndTheirMovies.push(info);
     });
+
+    var watchedInfo = {
+      'user': {
+        'id':8532,
+        'nickname':'watched'
+      },
+      'movies': watchedMovies
+    };
+
+    usersAndTheirMovies.push(watchedInfo);
 
     return usersAndTheirMovies;
   }
