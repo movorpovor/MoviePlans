@@ -35,6 +35,7 @@ html, body, .main-div, #root {
 }
 
 .cover {
+  min-width: 76px;
   width: 76px;
   height: 110px;
 }
