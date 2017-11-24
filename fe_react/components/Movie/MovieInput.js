@@ -57,7 +57,7 @@ export default class MovieInput extends Component{
         })
 
         return (
-            <div className='block'>
+            <div className='block input-block'>
                 <div>
                     <input
                         className='movie-input'
@@ -71,7 +71,7 @@ export default class MovieInput extends Component{
                 </select>
                 <button onClick={this.onBtnClickHandler.bind(this)} ref='add_button'
                     className='add-button'>
-                    Добавить фильм
+                    Add
                 </button>
             </div>
         );

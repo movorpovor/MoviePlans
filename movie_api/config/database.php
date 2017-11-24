@@ -44,6 +44,26 @@
             }
         }
 
+        public function updateMovieState($movie){
+            $query = "
+                UPDATE movie_state
+                SET
+                    state_id=:state_id
+                WHERE
+                    movie_id=:movie_id";
+        
+            $stmt = $this->conn->prepare($query);
+
+            $stmt->bindParam(":state_id", $movie->state_id);
+            $stmt->bindParam(":movie_id", $movie->movie_id);
+            
+            if ($stmt->execute()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public function movieExists($km_ref, $answer){
             $query = "
                 SELECT id
