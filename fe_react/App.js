@@ -80,8 +80,8 @@ class App extends Component{
         <CustomDragLayer />
         <div className='list-of-lists'>
           {template}
+          <MovieInput users={this.state.users}/>
         </div>
-        <MovieInput users={this.state.users}/>
       </div>
     );
   }

@@ -108,8 +108,13 @@ class MovieList extends Component{
         const { connectDropTarget, isOver, canDrop } = this.props;
 
         return connectDropTarget(
-            <div className='block'>
-                {moviesTemplate}
+            <div className='block movie-block'>
+                <div className='list-header'>
+                    <a className='list-header-text'>{this.state.user.nickname}</a>
+                </div>
+                <div className='list-of-movies'>
+                    {moviesTemplate}
+                </div>
             </div>
         );
     }
