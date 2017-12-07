@@ -19,7 +19,7 @@ class App extends Component{
 
   componentWillMount(){
     $.ajax({
-      url: "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/base/get_init_state",
+      url: "http://api.movorpovor.ru/movie/base/get_init_state",
       type : "GET",
       success : function(response) {
         this.setState({

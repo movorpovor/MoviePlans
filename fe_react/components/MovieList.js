@@ -27,7 +27,7 @@ function updateMovieState(movie) {
     };
 
     $.ajax({
-        url: "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/movie/update_state",
+        url: "http://api.movorpovor.ru/movie/movie/update_state",
         type : "POST",
         contentType : 'application/json',
         data : JSON.stringify(simpleMovieInfo),

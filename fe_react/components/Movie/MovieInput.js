@@ -5,7 +5,7 @@ import $ from 'jquery';
 export default class MovieInput extends Component{
     constructor(props){
         super(props);
-        this.api_url = "http://movorpovor.ru.host1630677.serv63.hostland.pro/movie_api/";
+        this.api_url = "http://api.movorpovor.ru/movie/";
         this.state = {
             users: props.users
         };

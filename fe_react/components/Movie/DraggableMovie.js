@@ -29,20 +29,20 @@ const movieSource = {
     }
 };
 
-    const OPTIONS = {
-        arePropsEqual: function arePropsEqual(props, otherProps) {
-            let isEqual = true;
-            if (props.movie.id === otherProps.movie.id
-            ) {
-                isEqual = true;
-            } else {
-                isEqual = false;
-            }
-            return isEqual;
+const OPTIONS = {
+    arePropsEqual: function arePropsEqual(props, otherProps) {
+        let isEqual = true;
+        if (props.movie.id === otherProps.movie.id
+        ) {
+            isEqual = true;
+        } else {
+            isEqual = false;
         }
-    };
+        return isEqual;
+    }
+};
 
-    function collectDragSource(connectDragSource, monitor) {
+function collectDragSource(connectDragSource, monitor) {
     return {
         connectDragSource: connectDragSource.dragSource(),
         connectDragPreview: connectDragSource.dragPreview(),
