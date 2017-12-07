@@ -48,24 +48,8 @@
             $stmt = $this->db->readAllMovies($_GET['user_id']);
             $num = $stmt->rowCount();
             if ($num>0) {
-                $movies_arr=array();
-
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                    extract($row);
-            
-                    $movie_item=array(
-                        "id" => $movie_id,
-                        "title" => $title,
-                        "original_title" => $original_title,
-                        "km_ref" => $km_ref,
-                        "description" => $description,
-                        "cover" => $cover,
-                        "user_id" => $user_id,
-                        "state_id" => $state_id
-                    );
-            
-                    array_push($movies_arr, $movie_item);
-                }
+                include_once('config/dbParser.php');
+                $movies_arr = DbParser::parseSingleMovie($stmt);
             }
 
             return $movies_arr;
